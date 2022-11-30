@@ -2,14 +2,14 @@ FROM dwavesys/leapide:latest-v2-prod
 
 USER root
 
-RUN apt update && \
-    apt install -yq --no-install-recommends \
-    nodejs \
-    npm && \
-    apt clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/*
+# install system packages
+RUN apt-get update \
+    && apt-get install -yq --no-install-recommends \
+        clang \
+        libboost-dev \
+    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
 
-RUN pip install --no-cache-dir -r requirements.txt && \
-    rm -rf /tmp/*
-
-USER gitpod
+# install system-wide python package
+RUN pip install --no-cache-dir \
+        dwave-ocean-sdk==4.0.0 \
+    && rm -rf /tmp/*
